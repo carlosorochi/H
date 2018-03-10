@@ -28,6 +28,10 @@ wget https://github.com/AppImage/AppImageKit/files/584665/data.zip -O data.tar.g
 # prepare output directory
 mkdir -p ./out/
 
+# enable binfmt-misc
+# https://github.com/travis-ci/travis-ci/issues/3376#issuecomment-168003756
+docker run --rm --privileged multiarch/qemu-user-static:register
+
 # build AppImageKit
 docker run \
     --device /dev/fuse:mrw \
