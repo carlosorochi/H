@@ -86,7 +86,7 @@ sudo apt-get install equivs vim-common
 sudo chown -R travis.travis .
 
 # build .deb
-(cd out ; equivs-build ../../appimaged.ctl)
+[ "$ARCH" != "armhf" ] && (cd out ; equivs-build ../../appimaged.ctl)
 
 # remove binaries from output directory
 ls -al out/
