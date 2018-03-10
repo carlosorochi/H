@@ -7,6 +7,7 @@ services:
 env:
   - ARCH=x86_64 DOCKER_IMAGE=quay.io/appimage/appimagebuild
   - ARCH=i686 DOCKER_IMAGE=quay.io/appimage/appimagebuild-i386
+  - ARCH=armhf DOCKER_IMAGE=quay.io/appimage/appimagebuild-armhf-qemu
 
 script:
   - bash travis/travis-build.sh
