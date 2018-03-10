@@ -62,7 +62,21 @@ cd build/
 
 # test AppImages
 [ "$ARCH" == "i686" ] && sudo apt-get install -y gcc-multilib lib32z1 libfuse2 libfuse2:i386 libglib2.0-0:i386 libcairo2:i386
-bash -x ../travis/test-appimages.sh
+
+if [ "$ARCH" != "armhf" ]; then
+    bash -x ../travis/test-appimages.sh
+else
+    docker run \
+        --cap-add SYS_ADMIN \
+        --device /dev/fuse:mrw \
+        -e ARCH -e TRAVIS -e TRAVIS_BUILD_NUMBER \
+        -i \
+        -v "${PWD}"/travis/:/travis \
+        -v "${PWD}"/build:/build \
+        -w /build \
+        "$DOCKER_IMAGE" \
+        /bin/bash -x "/travis/test-appimages.sh"
+fi
 
 # install more tools
 # (vim-common contains xxd)
