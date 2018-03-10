@@ -21,7 +21,7 @@ orig_cwd=$(pwd)
 repo_root="@CMAKE_CURRENT_SOURCE_DIR@"
 
 # TODO: check whether those options are needed for other tools' build processes
-small_FLAGS="-Os -ffunction-sections -fdata-sections"
+small_FLAGS="-Os -ffunction-sections -fdata-sections -std=c99"
 small_LDFLAGS="-s -Wl,--gc-sections"
 
 cd $repo_root
