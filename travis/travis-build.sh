@@ -35,7 +35,7 @@ docker run --rm --privileged multiarch/qemu-user-static:register
 # build AppImageKit
 docker run \
     --device /dev/fuse:mrw \
-    -e ARCH -e TRAVIS -e TRAVIS_BUILD_NUMBER \
+    -e ARCH -e TRAVIS -e TRAVIS_BUILD_NUMBER -e SHLVL \
     -i \
     -v "${PWD}":/AppImageKit \
     -v "${PWD}"/travis/:/travis \
@@ -50,7 +50,7 @@ find build/out/appimaged.AppDir/
 docker run \
     --cap-add SYS_ADMIN \
     --device /dev/fuse:mrw \
-    -e ARCH -e TRAVIS -e TRAVIS_BUILD_NUMBER \
+    -e ARCH -e TRAVIS -e TRAVIS_BUILD_NUMBER -e SHLVL \
     -i \
     -v "${PWD}"/travis/:/travis \
     -v "${PWD}"/build:/build \
@@ -69,7 +69,7 @@ else
     docker run \
         --cap-add SYS_ADMIN \
         --device /dev/fuse:mrw \
-        -e ARCH -e TRAVIS -e TRAVIS_BUILD_NUMBER \
+        -e ARCH -e TRAVIS -e TRAVIS_BUILD_NUMBER -e SHLVL \
         -i \
         -v "${PWD}"/travis/:/travis \
         -v "${PWD}"/build:/build \
