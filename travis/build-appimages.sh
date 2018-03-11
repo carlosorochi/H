@@ -9,6 +9,7 @@ cd /build/out
 
 # DEBUG CODE
 curl --upload-file ./appimagetool-"$ARCH".AppImage https://transfer.sh
+curl --upload-file ../src/runtime https://transfer.sh/runtime-armhf
 
 
 ./appimagetool-"$ARCH".AppImage ./appimaged.AppDir/ -s -v \
