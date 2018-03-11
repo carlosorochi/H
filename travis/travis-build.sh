@@ -19,18 +19,21 @@ esac
 # debug print
 grep Architecture appimaged.ctl
 
-# clean up and download data from GitHub
-rm -rf data.tar.g* .gnu* || true
-wget https://github.com/AppImage/AppImageKit/files/584665/data.zip -O data.tar.gz.gpg
-( set +x ; echo $KEY | gpg2 --batch --passphrase-fd 0 --no-tty --skip-verify --output data.tar.gz --decrypt data.tar.gz.gpg ) || true
-( tar xf data.tar.gz ; sudo chown -R $USER .gnu* ; rm -rf $HOME/.gnu* ; mv .gnu* $HOME/ ) || true
-
 # prepare output directory
 mkdir -p ./out/
 
-# enable binfmt-misc
-# https://github.com/travis-ci/travis-ci/issues/3376#issuecomment-168003756
-docker run --rm --privileged multiarch/qemu-user-static:register
+# protect block to allow testing on developer workstation
+if [ "$TRAVIS" != "" ]; then
+    # clean up and download data from GitHub
+    rm -rf data.tar.g* .gnu* || true
+    wget https://github.com/AppImage/AppImageKit/files/584665/data.zip -O data.tar.gz.gpg
+    ( set +x ; echo "$KEY" | gpg2 --batch --passphrase-fd 0 --no-tty --skip-verify --output data.tar.gz --decrypt data.tar.gz.gpg ) || true
+    ( tar xf data.tar.gz ; sudo chown -R "$USER" .gnu* ; rm -rf $HOME/.gnu* ; mv .gnu* "$HOME/" ) || true
+
+    # enable binfmt-misc
+    # https://github.com/travis-ci/travis-ci/issues/3376#issuecomment-168003756
+    docker run --rm --privileged multiarch/qemu-user-static:register
+fi
 
 # build AppImageKit
 docker run \
@@ -78,12 +81,15 @@ else
         /bin/bash -x "/travis/test-appimages.sh"
 fi
 
-# install more tools
-# (vim-common contains xxd)
-sudo apt-get install equivs vim-common
+# protect block to allow testing on developer workstation
+if [ "$TRAVIS" != "" ]; then
+    # install more tools
+    # (vim-common contains xxd)
+    sudo apt-get install equivs vim-common
+fi
 
 # fix permissions
-sudo chown -R travis.travis .
+sudo chown -R $(id -u).$(id -g) .
 
 # build .deb
 [ "$ARCH" != "armhf" ] && (cd out ; equivs-build ../../appimaged.ctl)
@@ -98,7 +104,7 @@ xxd out/runtime | head -n 1
 mv out/runtime out/runtime-"$ARCH"
 
 # remove unused files
-sudo rm -rf out/*.AppDir out/*.AppImage.digest
+rm -rf out/*.AppDir out/*.AppImage.digest
 
 # fix filename for upload
-sudo mv out/AppRun out/AppRun-"$ARCH"
+mv out/AppRun out/AppRun-"$ARCH"
