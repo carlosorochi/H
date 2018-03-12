@@ -74,8 +74,8 @@ else
         --device /dev/fuse:mrw \
         -e ARCH -e TRAVIS -e TRAVIS_BUILD_NUMBER -e SHLVL \
         -i \
-        -v "${PWD}"/travis/:/travis \
-        -v "${PWD}"/build:/build \
+        -v "${PWD}"/../travis/:/travis \
+        -v "${PWD}"/../build:/build \
         -w /build \
         "$DOCKER_IMAGE" \
         /bin/bash -x "/travis/test-appimages.sh"
