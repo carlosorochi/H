@@ -73,7 +73,7 @@ dd bs=1 if=runtime skip=$(($(echo 0x$HEXOFFSET)+0)) count=$(($(echo 0x$HEXLENGTH
 
 # Insert AppImage magic bytes
 # TODO: remove ARM workaround!
-if [ "$ARCH" != "armhf" ] || [ "$ARCH" != "armv7l" ]; then
+if [ "$ARCH" != "armhf" ] && [ "$ARCH" != "armv7l" ]; then
     printf '\x41\x49\x02' | dd of=runtime bs=1 seek=8 count=3 conv=notrunc
 fi
 
