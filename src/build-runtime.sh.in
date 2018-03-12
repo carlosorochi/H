@@ -80,4 +80,7 @@ ld -r -b binary -o data.o runtime
 # Show header for debugging purposes
 xxd runtime | head -n 1
 
+# run runtime to see whether it's still a working binary
+./runtime --appimage-version
+
 cp runtime data.o "$orig_cwd"
